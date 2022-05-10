@@ -1,4 +1,0 @@
-admin_username=admdeb01
-snmp_username=snmpdeb01
-location=
-contact=
