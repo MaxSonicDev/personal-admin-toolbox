@@ -1,6 +1,11 @@
 #!/bin/bash
 echo "--- Deploy Debian / Ubuntu Linux Server ---"
 
+if (( $EUID != 0 )); then
+    echo "You must be root to run this script."
+    exit 1
+fi
+
 read -p "Whould you like to install and configure your new server ? (y/n) " REPLY
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Nn]$ ]]
@@ -9,14 +14,23 @@ then
 fi
 
 # Config : 
-source config.txt
+
+if [ -f ./config.txt ]; then
+    source config.txt
+else 
+    echo "Config file not found."
+    admin_username=admdeb01
+    snmp_username=snmpdeb01
+    location=CHANGEME
+    contact=CHANGEME
+fi 
 
 
 echo "---------------------------"
 echo "🚀 - Update & install basic package"
 echo "---------------------------"
 
-apt update && apt upgrade -y && apt install -y vim htop sudo curl wget git net-tools ufw fail2ban openssh-server snmp snmpd libsnmp-dev
+apt update && apt upgrade -y && apt install -y vim htop sudo curl wget git net-tools ufw fail2ban openssh-server snmp snmpd libsnmp-dev molly-guard 
 
 echo "---------------------------"
 echo "🧱 - Configure Firewall (UFW)"
