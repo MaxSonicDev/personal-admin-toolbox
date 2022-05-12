@@ -113,6 +113,7 @@ echo "---------------------------"
 echo "🧑‍🤝‍🧑 - Generate SNMPv3 community"
 echo "---------------------------"
 sudo systemctl stop snmpd
+sudo mkdir /snmp
 AuthSNMP=$( tr -cd '[:alnum:]' < /dev/urandom | fold -w10 | head -n 1 ) # generate random Password
 CryptoSNMP=$( tr -cd '[:alnum:]' < /dev/urandom | fold -w10 | head -n 1 ) # generate random Password
 sudo net-snmp-create-v3-user -ro -A $AuthSNMP -X $CryptoSNMP -a SHA-512 -x AES $snmp_username
@@ -130,12 +131,14 @@ rouser $snmp_username
 dontLogTCPWrappersConnects true
 EOF
 
+sudo systemctl start snmpd
+
 echo "---------------------------"
 echo "✨ - Final step"
 echo "---------------------------"
 
 ip=$( hostname -b )
-echo -p "SSH control : ssh $admin_username@$ip
+echo -e "SSH control : ssh $admin_username@$ip
 Password : $password (only for rescue on tty console)
 SNMPv3 username : $snmp_username
 SNMPv3 Auth Algorithm : SHA-512
