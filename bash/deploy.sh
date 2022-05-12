@@ -30,7 +30,9 @@ echo "---------------------------"
 echo "🚀 - Update & install basic package"
 echo "---------------------------"
 
-apt update && apt upgrade -y && apt install -y vim htop sudo curl wget git net-tools ufw fail2ban openssh-server snmp snmpd libsnmp-dev molly-guard >/dev/null 2>&1
+apt update >/dev/null 2>&1
+apt upgrade -y >/dev/null 2>&1
+apt install -y vim htop sudo curl wget git net-tools ufw fail2ban openssh-server snmp snmpd libsnmp-dev molly-guard >/dev/null 2>&1
 
 echo "---------------------------"
 echo "🧱 - Configure Firewall (UFW)"
