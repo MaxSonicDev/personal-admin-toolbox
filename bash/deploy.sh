@@ -25,7 +25,6 @@ else
     contact=CHANGEME
 fi 
 
-
 echo "---------------------------"
 echo "🚀 - Update & install basic package"
 echo "---------------------------"
@@ -67,8 +66,6 @@ else
     sudo passwd -l root
 fi
 
-
-
 echo "---------------------------"
 echo "🔒 - Generate SSH Key for admin user"
 echo "---------------------------"
@@ -108,7 +105,6 @@ sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh
 # Make a root login disable
 sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/g' /etc/ssh/sshd_config
 
-
 echo "---------------------------"
 echo "🧑‍🤝‍🧑 - Generate SNMPv3 community"
 echo "---------------------------"
@@ -146,5 +142,3 @@ SNMPv3 Auth password : $AuthSNMP
 SNMPv3 Crypto Algorithm : AES
 SNMPv3 Crypto Password : $CryptoSNMP
 "
-
-
