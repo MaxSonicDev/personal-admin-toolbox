@@ -55,7 +55,7 @@ else
     sudo chown $admin_username: -R /home/$admin_username
     sudo chmod 700 -R /home/$admin_username
     password=$( tr -cd '[:alnum:]' < /dev/urandom | fold -w10 | head -n 1 ) # generate random password
-    read -p "Do you want to change $admin_username's password (For rescue only SSH | Auth disable) ? (y/n) " REPLY
+    read -p "Do you want to change $admin_username's password (For rescue only | SSH Auth disable) ? (y/n) " REPLY
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
