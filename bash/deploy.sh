@@ -53,7 +53,13 @@ else
     sudo chown $admin_username: -R /home/$admin_username
     sudo chmod 700 -R /home/$admin_username
     password=$( tr -cd '[:alnum:]' < /dev/urandom | fold -w10 | head -n 1 ) # generate random password
-    chpasswd <<<$admin_username:$password
+    read -p "Do you want to change $admin_username's password ? (y/n) " REPLY
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        passwd $admin_username
+    fi
+
     echo "$admin_username ALL=(ALL) NOPASSWD: ALL" | sudo EDITOR='tee -a' visudo
     echo "Disable root password"
     sudo passwd -l root
