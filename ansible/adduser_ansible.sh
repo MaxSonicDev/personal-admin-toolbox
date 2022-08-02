@@ -21,4 +21,5 @@ mkdir -p /home/$username/.ssh
 chmod 700 /home/$username/.ssh
 curl -o /home/$username/.ssh/authorized_keys https://github.com/$githubusername.keys
 chmod 600 /home/$username/.ssh/authorized_keys
+chown $username: -R /home/$username/
 echo "$username ALL=(ALL) NOPASSWD: ALL" | sudo EDITOR='tee -a' visudo
