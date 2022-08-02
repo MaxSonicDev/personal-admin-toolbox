@@ -1,0 +1,10 @@
+---
+ - name: Add pythobn 3.9 to RHEL 8 Based System
+   hosts: rhel_prod
+   become: yes
+   tasks:
+    - name: Changing version
+      dnf:
+       name: "python39"
+       state: latest
+

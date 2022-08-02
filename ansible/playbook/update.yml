@@ -8,4 +8,12 @@
 
        upgrade: yes
        update_cache: yes
-       cache_valid_time: 86400 #One day
+       cache_valid_time: 86400
+ - name: Update RHEL based system
+   hosts: rhel_prod
+   become: yes
+   tasks:
+    - name: Update RHEL based system
+      yum:
+       name: "*"
+       state: latest
