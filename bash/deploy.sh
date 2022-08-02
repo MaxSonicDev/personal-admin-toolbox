@@ -25,12 +25,13 @@ else
     contact=CHANGEME
 fi 
 
-
 echo "---------------------------"
 echo "🚀 - Update & install basic package"
 echo "---------------------------"
 
-apt update && apt upgrade -y && apt install -y vim htop sudo curl wget git net-tools ufw fail2ban openssh-server snmp snmpd libsnmp-dev molly-guard 
+apt update >/dev/null 2>&1
+apt upgrade -y >/dev/null 2>&1
+apt install -y vim htop sudo curl wget git net-tools ufw fail2ban openssh-server snmp snmpd libsnmp-dev molly-guard >/dev/null 2>&1
 
 echo "---------------------------"
 echo "🧱 - Configure Firewall (UFW)"
@@ -53,13 +54,17 @@ else
     sudo chown $admin_username: -R /home/$admin_username
     sudo chmod 700 -R /home/$admin_username
     password=$( tr -cd '[:alnum:]' < /dev/urandom | fold -w10 | head -n 1 ) # generate random password
-    echo $password | sudo passwd $admin_username --stdin
+    read -p "Do you want to change $admin_username's password (For rescue only | SSH Auth disable) ? (y/n) " REPLY
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        passwd $admin_username
+    fi
+
     echo "$admin_username ALL=(ALL) NOPASSWD: ALL" | sudo EDITOR='tee -a' visudo
     echo "Disable root password"
     sudo passwd -l root
 fi
-
-
 
 echo "---------------------------"
 echo "🔒 - Generate SSH Key for admin user"
@@ -95,13 +100,16 @@ echo "---------------------------"
 echo "🔧 - Configure SSH"
 echo "---------------------------"
 
-sed 's/#PermitRootLogin prohibit-password/PermitRootLogin no/g' /etc/ssh/sshd_config >/dev/null 2>&1
-sed 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config >/dev/null 2>&1
+# Make a password authentication disable
+sudo sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config
+# Make a root login disable
+sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/g' /etc/ssh/sshd_config
 
 echo "---------------------------"
 echo "🧑‍🤝‍🧑 - Generate SNMPv3 community"
 echo "---------------------------"
 sudo systemctl stop snmpd
+sudo mkdir /snmp
 AuthSNMP=$( tr -cd '[:alnum:]' < /dev/urandom | fold -w10 | head -n 1 ) # generate random Password
 CryptoSNMP=$( tr -cd '[:alnum:]' < /dev/urandom | fold -w10 | head -n 1 ) # generate random Password
 sudo net-snmp-create-v3-user -ro -A $AuthSNMP -X $CryptoSNMP -a SHA-512 -x AES $snmp_username
@@ -119,12 +127,14 @@ rouser $snmp_username
 dontLogTCPWrappersConnects true
 EOF
 
+sudo systemctl start snmpd
+
 echo "---------------------------"
 echo "✨ - Final step"
 echo "---------------------------"
 
 ip=$( hostname -b )
-echo -p "SSH control : ssh $admin_username@$ip
+echo -e "SSH control : ssh $admin_username@$ip
 Password : $password (only for rescue on tty console)
 SNMPv3 username : $snmp_username
 SNMPv3 Auth Algorithm : SHA-512
@@ -132,5 +142,3 @@ SNMPv3 Auth password : $AuthSNMP
 SNMPv3 Crypto Algorithm : AES
 SNMPv3 Crypto Password : $CryptoSNMP
 "
-
-
