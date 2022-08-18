@@ -1,0 +1,15 @@
+---
+- hosts : dell_sw
+  connection: network_cli
+  collections:
+    - dellemc.os10
+  vars:
+    date: "{{ lookup('pipe', 'date +%Y%m%d-%H%M') }}"
+  tasks:
+    - name: Backup
+      os10_config:
+        lines: ['hostname {{ inventory_hostname }}']
+        backup: yes
+        backup_options:
+            filename: 'backup{{ date }}.cfg'
+            dir_path: /path
