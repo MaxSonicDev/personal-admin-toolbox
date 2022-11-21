@@ -25,14 +25,14 @@ echo "---------------------------"
 echo "🚀 - Update & install basic package"
 echo "---------------------------"
 
-dnf update -y >/dev/null 2>&1
-dnf install iputils lsof openssh-server sudo tcpdump python3 >/dev/null 2>&1
+dnf update -y 
+dnf install iputils lsof openssh-server sudo tcpdump python3 
 
 echo "---------------------------"
 echo "🚀 - Disable SELinux"
 echo "---------------------------"
 
-sed '%s/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+sed 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
 echo "kernel.printk='4 1 7 4'" >> /etc/sysctl.conf
 
 echo "---------------------------"
