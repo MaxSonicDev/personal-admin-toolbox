@@ -68,14 +68,14 @@ ip link | awk -F: '$0 !~ "lo|vir|wl|^[^0-9]"{print $2;getline}'
 echo ""
 
 
-read -p "Enter physicial network device ID for management" net_id
-read -p "Enter physicial network device ID for VxLan" net_id2
-read -p "Enter physicial network device ID for Storage" net_id3
-read -p "Enter ip address for management" ip_id
-read -p "Enter Gateway for management (X.X.X.X/XX format)" gw_id
-read -p "Enter dns address for management (if empty use Quad9 DNS)" dns_id
-read -p "Enter ip address for VxLan" ip_id2
-read -p "If target is a compute node, enter ip address for storage (optionnal)" ip_id3 
+read -p "Enter physicial network device ID for management " net_id
+read -p "Enter physicial network device ID for VxLan " net_id2
+read -p "Enter physicial network device ID for Storage " net_id3
+read -p "Enter ip address for management (X.X.X.X/XX format) " ip_id
+read -p "Enter Gateway for management  " gw_id
+read -p "Enter dns address for management (if empty use Quad9 DNS) " dns_id
+read -p "Enter ip address for VxLan " ip_id2
+read -p "If target is a compute node, enter ip address for storage (optionnal) " ip_id3 
 
 # Create line for br-storage
 if [ -z "$ip_id3"]
