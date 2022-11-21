@@ -40,7 +40,8 @@ echo "🚀 - Download public ssh key of deployment machine"
 echo "---------------------------"
 
 read -p "Please, put the ssh public key of Ansible deployment machine :" sshkey_deploy
-
+mkdir -p /root/.ssh
+touch /root/.ssh/authorized_keys
 echo $sshkey_deploy >> /root/.ssh/authorized_keys
 echo "---------------------------"
 echo "🚀 - Create a dedicated LVM cinder volume"
